@@ -1,211 +1,190 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <time.h>
-//
-//
-//#define MAX_ROW 10
-//#define MAX_COL 10
-//#define MAX_STACK_SIZE 100 //스택의 최대 크기
-//#define TRUE 1                //TRUE의 초기화
-//#define FALSE 0                //false의 초기화
-//#define EXIT_ROW MAX_ROW-1
-//#define EXIT_COL MAX_COL-1
-//
-//typedef struct {                        //element 재정의
-//    short int row;
-//    short int col;
-//    short int dir;
-//}element;
-//
-//typedef struct {
-//    short int vert;
-//    short int horiz;
-//}offsets;
-//
-//offsets move[8] = { {-1, 0},        //여덟 방향 이동에 대한 배열
-//                                {-1,1},
-//                                {0,1},
-//                                {1,1},        //남동쪽
-//                                {1,0},
-//                                {1,-1},
-//                                {0,-1},
-//                                {-1,-1}        //북서쪽
-//};
-//
-//
-//element stack[MAX_STACK_SIZE];
-//
-//int maze[MAX_ROW][MAX_COL];                //미로선언
-//int mark[MAX_ROW][MAX_COL];                //지나온 배열 선언
-//
-////사용될 함수 선언
-//void path();
-//element add(int* top, element position);
-//element delete(int* top);
-//
-//int main(void) {
-//    int i, j;
-//
-//    //미로 생성 사방을 벽으로 둘러싸고 시작지점인 maze[1][1] 은 0으로 설정
-//    //commit 어디가 출구인지를 만들지 않았다.그부분을 수정해서 올려보겠다 
-//    srand((unsigned)time(NULL));
-//    for (i = 0; i < MAX_ROW; i++)
-//        for (j = 0; j < MAX_COL; j++) {
-//            if (i == 1 && j == 1)
-//                maze[i][j] = 0;
-//            else if (i == 0 || j == 0 || i == MAX_ROW - 1 || j == MAX_COL - 1)
-//                maze[i][j] = 1;
-//            else
-//                maze[i][j] = rand() % 2;
-//        }
-//    //생성된 배열을 출력
-//    printf("*********** create maze ***********\n");
-//    printf("    ");
-//    for (j = 0; j < MAX_COL; j++)
-//        printf("%2d ", j);                        //보기 편하도록 COL 을 출력
-//    printf("\n\n");
-//    for (i = 0; i < MAX_ROW; i++) {
-//        printf("%2d  ", i);                        //보기 편하도록 ROW 를 출력
-//        for (j = 0; j < MAX_COL; j++)
-//            printf(" %d ", maze[i][j]);
-//        printf("\n");
-//    }
-//    printf("\n");
-//
-//    for (i = 0; i < MAX_ROW; i++)
-//        for (j = 0; j <= MAX_COL; j++)
-//            mark[i][j] = 0;
-//    printf("******** maze road ********\n");
-//    path();
-//
-//    return 0;
-//}
-//
-//element add(int* top, element position)                        //스택에 삽입
-//{
-//    (*top)++;
-//    stack[*top].row = position.row;
-//    stack[*top].col = position.col;
-//    stack[*top].dir = position.dir;
-//}
-//
-//
-//element delete(int* top)                                                //스택에서 꺼냄
-//{
-//    element result;
-//    if (*top < 0) {
-//        printf("Stack is Empty.\n");
-//    }
-//    else {
-//        result = stack[*top];
-//        (*top)--;
-//    }
-//    return result;
-//}
-//
-//void path()
-//{
-//    //미로를 통과하는 경로가 있으면 그 경로를 출력한다
-//    int i, row, col, next_row, next_col, dir, found = FALSE;
-//    int top;
-//    element position;
-//    mark[1][1] = 1;
-//    top = 0;
-//    stack[0].row = 1;
-//    stack[0].col = 1;
-//    stack[0].dir = 1;
-//
-//    while (top > -1 && !found) {
-//        position = delete(&top);                        //스택에서 꺼냄
-//        row = position.row;
-//        col = position.col;
-//        dir = position.dir;
-//        while (dir < 8 && !found) {                        //dir방향으로 이동
-//            next_row = row + move[dir].vert;
-//            next_col = col + move[dir].horiz;
-//            if (next_row == EXIT_ROW && next_col == EXIT_COL)
-//                found = TRUE;
-//            else if (!maze[next_row][next_col] && !mark[next_row][next_col]) {
-//                mark[next_row][next_col] = 1;
-//                position.row = row;
-//                position.col = col;
-//                position.dir = ++dir;
-//                add(&top, position);                //스택에 삽입
-//                row = next_row;
-//                col = next_col;
-//                dir = 0;
-//            }
-//            else ++dir;
-//        }
-//    }
-//    if (found) {                                                                //길을 찾으면 출력
-//        printf("The path is : \n");
-//        printf("row col\n");
-//        for (i = 0; i <= top; i++)
-//            printf("%2d%5d\n", stack[i].row, stack[i].col);
-//        printf("%2d%5d\n", row, col);
-//    }
-//    else printf("The maze dose not have a path\n");
-//}
-//
-//#include <stdio.h>
-//struct pos {
-//	int i;
-//	int j;
-//};
-//
-//struct pos stack[100];
-//
-//int top = -1;
-//
-//void pop() {
-//	top--;
-//}
-//void push(int i, int j) {
-//	top++;
-//	stack[top].i = i;
-//	stack[top].j = j;
-//}
-//int maze[5][5] = {
-//	{1,0,1,1,1},
-//	{0,0,0,0,0},
-//	{1,0,1,1,0},
-//	{1,0,0,0,0},
-//	{1,1,2,1,1},
-//};
-//int check[5][5] = { 0, };
-//
-//void search(int i, int j) {
-//	if (maze[i][j] == 1) {
-//		return;
-//	}
-//	push(i, j);
-//	check[i][j] = 1;
-//	if (maze[i][j] == 2) {
-//		printf("EXIT\n");
-//		for (int k = 0; k <= top; k++) {
-//			printf("(%d %d) ", stack[k].i, stack[k].j);
-//		}
-//		printf("\n");
-//	}
-//	if (check[i + 1][j] != 1 && i + 1 >= 0 && i + 1 <= 4 && j >= 0 && j <= 4) {
-//		search(i + 1, j);
-//	}
-//	if (check[i][j + 1] != 1 && i >= 0 && i <= 4 && j + 1 >= 0 && j + 1 <= 4) {
-//		search(i, j + 1);
-//	}
-//	if (check[i - 1][j] != 1 && i - 1 >= 0 && i - 1 <= 4 && j >= 0 && j <= 4) {
-//		search(i - 1, j);
-//	}
-//	if (check[i][j - 1] != 1 && i >= 0 && i <= 4 && j - 1 >= 0 && j - 1 <= 4) {
-//		search(i, j - 1);
-//	}
-//	check[i][j] = 0;
-//	pop();
-//	return;
-//}
-//
-//int main() {
-//	search(0, 1);
-//	return 0;
-//}
+
+#include <stdio.h>
+#include <stdlib.h>
+#define _CRT_SECURE_NO_WARNINGS
+
+#define MAX_SIZE 100
+#define MAZE_SIZE 10
+
+typedef struct Mouse {
+	int row;
+	int col;
+} Mouse;
+
+typedef struct Stack {
+	Mouse data[MAX_SIZE];
+	int top;
+} Stack;
+
+char maze[MAZE_SIZE][MAZE_SIZE];
+
+int mazeRow = 0; int mazeCol = 0;
+
+void readMaze(char string[]) {
+	FILE* fp;
+	fp = fopen(string, "r");
+
+	while (!feof(fp)) {
+		char c = fgetc(fp);
+		if (c == '\n') {
+			mazeRow++; mazeCol = 0;
+		}
+		else maze[mazeRow][mazeCol++] = c;
+	}
+	fclose(fp);
+	mazeRow++; mazeCol--;
+}
+
+void init(Stack* p) {
+	p->top = -1;
+}
+
+int isFull(Stack* p) {
+	return (p->top == MAX_SIZE - 1);
+}
+
+int isEmpty(Stack* p) {
+	return (p->top == -1);
+}
+
+void push(Stack* p, Mouse data) {
+	if (isFull(p))
+	{
+		printf("Stack is full.\n");
+		return;
+	}
+	else {
+		p->top++;
+		p->data[p->top].row = data.row;
+		p->data[p->top].col = data.col;
+	}
+}
+
+Mouse pop(Stack* p) {
+	if (isEmpty(p)) {
+		printf("Stack is empty.\n");
+		exit(1);
+	}
+	return p->data[(p->top)--];
+}
+
+void pushTrace(Stack* s, int x, int y) {
+	if (x<0 || y<0 || x>MAZE_SIZE || y>MAZE_SIZE) {
+		return;
+	}
+	else if (maze[x][y] != '1' && maze[x][y] != '.') {
+		Mouse tmp;
+		tmp.row = x;
+		tmp.col = y;
+
+		push(s, tmp);
+	}
+}
+
+void drawMap() {
+	for (int row = 0; row < mazeRow; row++) {
+		for (int col = 0; col < mazeCol; col++) {
+			if (maze[row][col] == '0') {
+				printf("□");
+			}
+			else if (maze[row][col] == '1') {
+				printf("■");
+			}
+			else {
+				printf("%c ", maze[row][col]);
+			}
+		}
+		printf("\n");
+	}
+}
+
+int init_mouse(Mouse* m) {
+	for (int row = 0; row < MAZE_SIZE; row++) {
+		for (int col = 0; col < MAZE_SIZE; col++) {
+			if (maze[row][col] == 'M') {
+				m->row = row;
+				m->col = col;
+				return 0;
+			}
+		}
+	}
+	printf("couldn't find an  entrance: fail\n");
+	exit(1);
+}
+
+void appendMaze() {
+	FILE* fp;
+	fp = fopen("trace.txt", "a");
+	if (fp == NULL) {
+		puts("파일을 찾을 수 없습니다.");
+		exit(1);
+	}
+	for (int row = 0; row < mazeRow; row++) {
+		for (int col = 0; col < mazeCol; col++) {
+			fputc(maze[row][col], fp);
+		}
+		fputc('\n', fp);
+	}
+	fclose(fp);
+}
+
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		puts("파일 열기에 실패했습니다.\n");
+		return 1;
+	}
+	Stack s;
+	Mouse m;
+	int col, row, x, y;
+	FILE* fp;
+	fp = fopen("trace.txt", "w");
+	if (fp == NULL) {
+		printf("파일을 만들 수 없습니다.\n");
+		exit(1);
+	}
+
+	readMaze(argv[1]);
+
+	init(&s);
+
+	init_mouse(&m);
+
+	printf("미로 \n");
+	drawMap();
+
+	printf("\n이동 경로\n");
+	printf("시작 (%d, %d) -> ", m.row, m.col);
+	fprintf(fp, "시작 (%d, %d) -> ", m.row, m.col);
+
+	while (maze[m.row][m.col] != 'X') {
+		x = m.row;
+		y = m.col;
+
+		maze[x][y] = '.';
+
+		pushTrace(&s, x + 1, y);
+		pushTrace(&s, x - 1, y);
+		pushTrace(&s, x, y + 1);
+		pushTrace(&s, x, y - 1);
+
+		if (isEmpty(&s)) {
+			printf("\n이동 경로를 찾을 수 없습니다. 실패\n");
+			drawMap();
+			return 0;
+		}
+		else {
+			m = pop(&s);
+			printf("(%d, %d) -> ", m.row, m.col);
+			fprintf(fp, "(%d, %d) -> ", m.row, m.col);
+		}
+	}
+	printf("도착\n");
+	fprintf(fp, "도착\n");
+	fclose(fp);
+
+	drawMap();
+	printf("탐색 성공\n");
+	appendMaze();
+
+	return 0;
+}
